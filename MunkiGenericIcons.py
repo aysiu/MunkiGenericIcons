@@ -10,13 +10,11 @@ import plistlib
 from shutil import copyfile
 import sys
 
-####### This is the only line you should change in the file ##########
+# If you are hosting Munki on a Linux or Windows server, put your Munki path here. Otherwise, leave blank
+MUNKI_ROOT_PATH=''
 
-# What is the name of the file you want to copy as your generic for missing icons? It should be within the icons folder.
-# Change it from "generic.png" to whatever the name of your generic icon is... or rename your icon to be "generic.png"
+# Define the name of the generic icon to copy. In all likelihood, you won't have to change this value unless you have an item in your repositories called "Generic"
 generic_name="Generic.png"
-
-####### This is the only line you should change in the file ##########
 
 # Define likely subdirectories
 pkgsinfo_sub="pkgsinfo"
@@ -24,18 +22,19 @@ icons_sub="icons"
 
 def main():
 
-   # Find the path to the Munki repository
-   munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
-   if os.path.exists(munkiimport_prefs_location):
-      munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
-      MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
-      if os.path.exists(MUNKI_ROOT_PATH):
-         print "Munki repo path exists at %s. Set to proceed..." % MUNKI_ROOT_PATH
+   if not MUNKI_ROOT_PATH:
+      # Find the path to the Munki repository
+      munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
+      if os.path.exists(munkiimport_prefs_location):
+         munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
+         MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
       else:
-         print "Munki repo does not appear to exist at %s" % MUNKI_ROOT_PATH
+         print "Cannot determine the Munki repo path. Be sure to run /usr/local/munki/munkiimport --configure to set the path for your user."
          sys.exit(1)
+   if os.path.exists(MUNKI_ROOT_PATH):
+      print "Munki repo path exists at %s. Set to proceed..." % MUNKI_ROOT_PATH
    else:
-      print "Cannot determine the Munki repo path. Be sure to run /usr/local/munki/munkiimport --configure to set the path for your user."
+      print "Munki repo does not appear to exist at %s" % MUNKI_ROOT_PATH
       sys.exit(1)
 
    # Create full paths for subdirectories
