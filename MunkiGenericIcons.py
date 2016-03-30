@@ -11,7 +11,7 @@ from shutil import copyfile
 import sys
 
 # If you are hosting Munki on a Linux or Windows server, put your Munki path here. Otherwise, leave blank
-MUNKI_ROOT_PATH=''
+your_munki_repo=''
 
 # Define the name of the generic icon to copy. In all likelihood, you won't have to change this value unless you have an item in your repositories called "Generic"
 generic_name="Generic.png"
@@ -22,7 +22,7 @@ icons_sub="icons"
 
 def main():
 
-   if not MUNKI_ROOT_PATH:
+   if not your_munki_repo:
       # Find the path to the Munki repository
       munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
       if os.path.exists(munkiimport_prefs_location):
@@ -31,6 +31,8 @@ def main():
       else:
          print "Cannot determine the Munki repo path. Be sure to run /usr/local/munki/munkiimport --configure to set the path for your user."
          sys.exit(1)
+   else:
+      MUNKI_ROOT_PATH=your_munki_repo
    if os.path.exists(MUNKI_ROOT_PATH):
       print "Munki repo path exists at %s. Set to proceed..." % MUNKI_ROOT_PATH
    else:
