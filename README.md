@@ -11,6 +11,11 @@ If you run `/usr/local/munki/managedsoftwareupdate -vvv`, you'll see a bunch of 
 Whatever your reasons, if you just want to make sure all your Munki items have corresponding icons, that's what Munki Generic Icons (MGI) is for.
 
 ## How to Install MGI
+
+### From Installer
+Go to [the MGI releases page](https://github.com/aysiu/MunkiGenericIcons/releases) and download and install the latest release.
+
+### Manually
 Download the files from this project to your Munki server and then copy the **MunkiGenericIcons.py** file to **/usr/local/mgi/** and make sure it's executable. For example:
 
 `sudo mkdir -p /usr/local/mgi`
@@ -20,6 +25,8 @@ Download the files from this project to your Munki server and then copy the **Mu
 `sudo chmod +x /usr/local/mgi/MunkiGenericIcons.py`
 
 ## How to Use MGI
+By default, MGI will look for the Munki repository location based on how you defined it when you first used `/usr/local/munki/munkiimport --configure` if your server is a Mac. I haven't tweaked it for Linux and Windows, but there is an option to manually override. Just find the line `your_munki_repo=''` and change it to be the absolute path to your Munki repo.
+
 MGI is looking for an icon in your icons subfolder called **Generic.png**, so you have to have a generic icon ready to go. It should be square (50 x 50, or 70 x 70, or 220 x 220) and it should be a .png file. If your Munki repo is in /Users/Shared/munki_repo/, then your icon would be at /Users/Shared/munki_repo/icons/Generic.png.
 
 MGI will not work as expected if you have an actual Munki item named *Generic* that needs its own icon. If that's the case, you'll have to modify the MGI script directly and change `generic_name="Generic.png"` line to reflect the icon you really want to be the generic icon (maybe call it *Generic1.png* or something).
